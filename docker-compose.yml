@@ -1,54 +1,117 @@
-
-
 services:
 
+  # -----------------------------------------------------------
+  # TIMESCALEDB
+  # -----------------------------------------------------------
+  # Stores all meter telemetry in PostgreSQL + TimescaleDB.
+  #
+  # Host access:
+  #   127.0.0.1:5432
+  #
+  # Used by:
+  #   services/api/app/ingestor.py
+  #
   timescaledb:
     image: timescale/timescaledb:latest-pg15
     container_name: voltanet_db
     restart: always
+
+    # Environment variables are loaded from the project root .env file
+    # when docker compose starts.
     environment:
       POSTGRES_DB: ${POSTGRES_DB}
       POSTGRES_USER: ${POSTGRES_USER}
       POSTGRES_PASSWORD: ${POSTGRES_PASSWORD}
+
+    # Expose Postgres to the host so host-run services can connect.
     ports:
       - "5432:5432"
+
+    # Persist database data between container restarts.
     volumes:
       - timescale_data:/var/lib/postgresql/data
+
+    # Healthcheck ensures the DB is actually accepting connections.
     healthcheck:
       test: ["CMD-SHELL", "pg_isready -U ${POSTGRES_USER} -d ${POSTGRES_DB}"]
       interval: 10s
       timeout: 5s
       retries: 5
 
+
+  # -----------------------------------------------------------
+  # REDIS
+  # -----------------------------------------------------------
+  # Not required for basic telemetry ingestion yet,
+  # but useful later for:
+  #   - caching
+  #   - pub/sub
+  #   - real-time dashboard state
+  #   - background task coordination
+  #
+  # Host access:
+  #   127.0.0.1:6379
+  #
   redis:
     image: redis:7-alpine
     container_name: voltanet_redis
     restart: always
+
     ports:
       - "6379:6379"
+
+    # Persist Redis data between restarts.
     volumes:
       - redis_data:/data
+
     healthcheck:
       test: ["CMD", "redis-cli", "ping"]
       interval: 10s
       timeout: 5s
       retries: 5
 
+
+  # -----------------------------------------------------------
+  # MOSQUITTO (MQTT BROKER)
+  # -----------------------------------------------------------
+  # Handles telemetry messages coming from the Rust meter agents.
+  #
+  # Internal container ports:
+  #   1883 = standard MQTT
+  #   9001 = MQTT over WebSockets
+  #
+  # Host access:
+  #   127.0.0.1:1884 -> container port 1883
+  #   127.0.0.1:9001 -> container port 9001
+  #
+  # Why 1884 on host?
+  #   To avoid conflicts with any local Mosquitto install already using 1883.
+  #
   mosquitto:
     image: eclipse-mosquitto:2
     container_name: voltanet_mqtt
     restart: always
+
     ports:
-      - "1883:1883"
+      - "1884:1883"
       - "9001:9001"
+
+    # Mount the broker configuration file from the repo into the container.
     volumes:
       - ./infra/mosquitto/mosquitto.conf:/mosquitto/config/mosquitto.conf
+
+    # Simple healthcheck: try to subscribe once to broker system topics.
     healthcheck:
       test: ["CMD", "mosquitto_sub", "-t", "$$SYS/#", "-C", "1", "-i", "healthcheck", "-W", "3"]
       interval: 10s
       timeout: 5s
       retries: 5
 
+
+# -------------------------------------------------------------
+# NAMED VOLUMES
+# -------------------------------------------------------------
+# These survive container recreation and keep your data persistent.
 volumes:
   timescale_data:
   redis_data:
