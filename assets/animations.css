@@ -1,13 +1,11 @@
-/* Animated background grid */
 .bg-grid {
     position: fixed;
-    top: 0;
-    left: 0;
+    inset: 0;
     width: 100%;
     height: 100%;
     background-image:
-        linear-gradient(rgba(0, 212, 255, 0.03) 1px, transparent 1px),
-        linear-gradient(90deg, rgba(0, 212, 255, 0.03) 1px, transparent 1px);
+        linear-gradient(rgba(239, 68, 68, 0.03) 1px, transparent 1px),
+        linear-gradient(90deg, rgba(239, 68, 68, 0.03) 1px, transparent 1px);
     background-size: 60px 60px;
     pointer-events: none;
     z-index: 0;
@@ -18,23 +16,17 @@
     content: '';
     position: absolute;
     inset: 0;
-    background: radial-gradient(ellipse at 50% 50%, transparent 0%, #020617 70%);
+    background: radial-gradient(ellipse at 50% 50%, transparent 0%, #0f0a0a 70%);
 }
 
 @keyframes gridMove {
-    0% {
-        transform: perspective(500px) rotateX(60deg) translateY(0);
-    }
-    100% {
-        transform: perspective(500px) rotateX(60deg) translateY(60px);
-    }
+    0% { transform: perspective(500px) rotateX(60deg) translateY(0); }
+    100% { transform: perspective(500px) rotateX(60deg) translateY(60px); }
 }
 
-/* Floating particles */
 .particles {
     position: fixed;
-    top: 0;
-    left: 0;
+    inset: 0;
     width: 100%;
     height: 100%;
     pointer-events: none;
@@ -46,10 +38,10 @@
     position: absolute;
     width: 4px;
     height: 4px;
-    background: rgba(0, 212, 255, 0.6);
+    background: rgba(239, 68, 68, 0.5);
     border-radius: 50%;
-    box-shadow: 0 0 10px rgba(0, 212, 255, 0.8);
-    animation: float linear infinite;
+    box-shadow: 0 0 10px rgba(239, 68, 68, 0.6);
+    animation: float 15s linear infinite;
 }
 
 @keyframes float {
@@ -57,19 +49,14 @@
         transform: translateY(100vh) rotate(0deg);
         opacity: 0;
     }
-    10% {
-        opacity: 1;
-    }
-    90% {
-        opacity: 1;
-    }
+    10% { opacity: 1; }
+    90% { opacity: 1; }
     100% {
         transform: translateY(-100vh) rotate(720deg);
         opacity: 0;
     }
 }
 
-/* Logo + glow */
 .logo-icon {
     animation: logoPulse 3s ease-in-out infinite;
 }
@@ -94,7 +81,6 @@
     }
 }
 
-/* Live pulse */
 .pulse-ring {
     position: relative;
     width: 12px;
@@ -107,7 +93,7 @@
     position: absolute;
     inset: 0;
     border-radius: 50%;
-    background: #00ff88;
+    background: #fbbf24;
 }
 
 .pulse-ring::before {
@@ -128,7 +114,6 @@
     50% { transform: scale(1.2); }
 }
 
-/* Status blink */
 .status-dot {
     animation: blink 2s ease-in-out infinite;
 }
@@ -138,8 +123,11 @@
     50% { opacity: 0.5; }
 }
 
-/* Battery shimmer */
 .battery-fill::after {
+    content: '';
+    position: absolute;
+    inset: 0;
+    background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.3), transparent);
     animation: shimmer 2s infinite;
 }
 
@@ -148,11 +136,9 @@
     100% { transform: translateX(100%); }
 }
 
-/* Scanline effect */
 .scanlines {
     position: fixed;
-    top: 0;
-    left: 0;
+    inset: 0;
     width: 100%;
     height: 100%;
     background: repeating-linear-gradient(

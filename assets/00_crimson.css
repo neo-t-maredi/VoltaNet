@@ -1,0 +1,76 @@
+:root {
+    --bg-0: #0f0a0a;
+    --bg-1: #1a1111;
+
+    --text-main: #faf5f5;
+    --text-muted: #a8a29e;
+    --text-dim: #78716c;
+
+    --danger: #ef4444;
+    --danger-deep: #b91c1c;
+    --orange: #f97316;
+    --yellow: #eab308;
+    --green: #22c55e;
+}
+
+/* Background */
+body {
+    background: linear-gradient(135deg, var(--bg-0) 0%, var(--bg-1) 50%, var(--bg-0) 100%);
+    color: var(--text-main);
+}
+
+/* Header */
+.dashboard-header {
+    border-bottom: 1px solid rgba(239, 68, 68, 0.15);
+}
+
+.brand-text h1 {
+    background: linear-gradient(135deg, #ffffff 0%, var(--danger) 50%, var(--danger-deep) 100%);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+}
+
+/* Cards */
+.metric-card,
+.chart-container,
+.node-card {
+    background: rgba(26, 17, 17, 0.65);
+    border: 1px solid rgba(120, 113, 108, 0.15);
+}
+
+.metric-card:hover,
+.node-card:hover {
+    border-color: rgba(239, 68, 68, 0.3);
+    box-shadow: 0 0 30px rgba(239, 68, 68, 0.15);
+}
+
+/* Metrics accents */
+.metric-card.demand { --accent: var(--danger); }
+.metric-card.nodes  { --accent: var(--orange); }
+.metric-card.battery{ --accent: var(--green); }
+.metric-card.solar  { --accent: var(--yellow); }
+
+/* Values */
+.metric-value {
+    color: #fff7f7;
+}
+
+/* Chart tweaks */
+.chart-container::before {
+    background: linear-gradient(90deg, transparent, rgba(239, 68, 68, 0.5), transparent);
+}
+
+/* Node cards */
+.node-power {
+    color: var(--danger);
+}
+
+/* Solar */
+.stat-value.solar {
+    color: var(--yellow);
+}
+
+/* Live badge */
+.live-text {
+    color: #fbbf24;
+}

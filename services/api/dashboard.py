@@ -115,12 +115,12 @@ def fetch_node_snapshot():
     finally:
         conn.close()
 
-def battery_bar(soc):
 
+def battery_bar(soc):
     if soc >= 60:
         color = "#22c55e"
     elif soc >= 30:
-        color = "#f59e0b"
+        color = "#f97316"
     else:
         color = "#ef4444"
 
@@ -128,7 +128,7 @@ def battery_bar(soc):
         [
             html.Div(
                 style={
-                    "width": f"{soc}%",
+                    "width": f"{max(0, min(100, soc))}%",
                     "height": "8px",
                     "backgroundColor": color,
                     "borderRadius": "6px",
@@ -138,9 +138,10 @@ def battery_bar(soc):
         style={
             "width": "100%",
             "height": "8px",
-            "backgroundColor": "#1f2937",
+            "backgroundColor": "rgba(255,255,255,0.08)",
             "borderRadius": "6px",
             "marginTop": "6px",
+            "overflow": "hidden",
         },
     )
 
@@ -149,7 +150,7 @@ def battery_color(soc: float) -> str:
     if soc >= 60:
         return "#22c55e"
     if soc >= 30:
-        return "#f59e0b"
+        return "#f97316"
     return "#ef4444"
 
 
@@ -178,7 +179,7 @@ app.layout = html.Div(
                     "Real-time SME microgrid monitoring dashboard",
                     style={
                         "marginTop": "0",
-                        "color": "#94a3b8",
+                        "color": "#a8a29e",
                         "fontSize": "18px",
                     },
                 ),
@@ -197,7 +198,7 @@ app.layout = html.Div(
                         "marginBottom": "16px",
                         "fontSize": "24px",
                         "fontWeight": "600",
-                        "color": "#e5e7eb",
+                        "color": "#faf5f5",
                     },
                 ),
                 dcc.Graph(id="demand-chart"),
@@ -212,7 +213,7 @@ app.layout = html.Div(
                         "marginBottom": "16px",
                         "fontSize": "24px",
                         "fontWeight": "600",
-                        "color": "#e5e7eb",
+                        "color": "#faf5f5",
                     },
                 ),
                 html.Div(id="node-grid"),
@@ -220,8 +221,8 @@ app.layout = html.Div(
         ),
     ],
     style={
-        "backgroundColor": "#020617",
-        "color": "#e5e7eb",
+        "backgroundColor": "#0f0a0a",
+        "color": "#faf5f5",
         "minHeight": "100vh",
         "padding": "32px",
         "fontFamily": "Arial, sans-serif",
@@ -289,31 +290,46 @@ def update_demand_chart(_):
             x=times,
             y=demand,
             mode="lines",
+            name="Cluster Demand Glow",
+            line=dict(color="rgba(239, 68, 68, 0.25)", width=8),
+            showlegend=False,
+            hoverinfo="skip",
+        )
+    )
+
+    fig.add_trace(
+        go.Scatter(
+            x=times,
+            y=demand,
+            mode="lines",
             name="Cluster Demand",
-            line=dict(color="#60a5fa", width=3),
+            line=dict(color="#ef4444", width=3),
             fill="tozeroy",
-            fillcolor="rgba(96, 165, 250, 0.10)",
+            fillcolor="rgba(239, 68, 68, 0.10)",
         )
     )
 
     fig.update_layout(
         title="Average Cluster Demand (Last 5 Minutes)",
-        template="plotly_dark",
-        paper_bgcolor="#0f172a",
-        plot_bgcolor="#111827",
+        template=None,
+        paper_bgcolor="#0f0a0a",
+        plot_bgcolor="#1a1111",
         margin=dict(l=40, r=40, t=50, b=40),
         height=420,
-        font=dict(color="#e5e7eb"),
+        font=dict(color="#faf5f5"),
         xaxis=dict(
             showgrid=True,
-            gridcolor="#1f2937",
+            gridcolor="rgba(120, 113, 108, 0.10)",
             zeroline=False,
+            tickfont=dict(color="#a8a29e"),
         ),
         yaxis=dict(
             title="kW",
             showgrid=True,
-            gridcolor="#1f2937",
+            gridcolor="rgba(120, 113, 108, 0.10)",
             zeroline=False,
+            tickfont=dict(color="#a8a29e"),
+            title_font=dict(color="#a8a29e"),
         ),
         legend=dict(
             orientation="h",
@@ -321,6 +337,12 @@ def update_demand_chart(_):
             y=1.02,
             xanchor="right",
             x=1,
+        ),
+        hovermode="x unified",
+        hoverlabel=dict(
+            bgcolor="rgba(26, 17, 17, 0.95)",
+            bordercolor="#ef4444",
+            font=dict(color="#faf5f5"),
         ),
     )
 
@@ -339,51 +361,47 @@ def update_nodes(_):
         soc_color = battery_color(node["battery_soc"])
 
         cards.append(
-    html.Div(
-        [
-            html.H3(
-                node["meter_id"].replace("_", " ").title(),
-                style={
-                    "marginBottom": "12px",
-                    "fontSize": "18px",
-                    "fontWeight": "600",
-                    "color": "#e5e7eb",
-                },
-            ),
-
-            html.H2(
-                f"{node['kw_demand']:.1f} kW",
-                style={
-                    "margin": "0 0 10px 0",
-                    "fontSize": "32px",
-                    "color": "#38bdf8",
-                },
-            ),
-
-            html.P(
-                f"Solar {node['solar_kw']:.1f} kW",
-                style={
-                    "margin": "4px 0",
-                    "color": "#94a3b8",
-                    "fontSize": "14px",
-                },
-            ),
-
-            html.P(
-                f"Battery {node['battery_soc']:.0f}%",
-                style={
-                    "margin": "6px 0 2px 0",
-                    "color": soc_color,
-                    "fontWeight": "700",
-                    "fontSize": "15px",
-                },
-            ),
-
-            battery_bar(node["battery_soc"]),
-        ],
-        className="card",
-    )
-)
+            html.Div(
+                [
+                    html.H3(
+                        node["meter_id"].replace("_", " ").title(),
+                        style={
+                            "marginBottom": "12px",
+                            "fontSize": "18px",
+                            "fontWeight": "600",
+                            "color": "#faf5f5",
+                        },
+                    ),
+                    html.H2(
+                        f"{node['kw_demand']:.1f} kW",
+                        style={
+                            "margin": "0 0 10px 0",
+                            "fontSize": "32px",
+                            "color": "#ef4444",
+                        },
+                    ),
+                    html.P(
+                        f"Solar {node['solar_kw']:.1f} kW",
+                        style={
+                            "margin": "4px 0",
+                            "color": "#a8a29e",
+                            "fontSize": "14px",
+                        },
+                    ),
+                    html.P(
+                        f"Battery {node['battery_soc']:.0f}%",
+                        style={
+                            "margin": "6px 0 2px 0",
+                            "color": soc_color,
+                            "fontWeight": "700",
+                            "fontSize": "15px",
+                        },
+                    ),
+                    battery_bar(node["battery_soc"]),
+                ],
+                className="card",
+            )
+        )
 
     return html.Div(
         cards,
@@ -398,3 +416,4 @@ def update_nodes(_):
 
 if __name__ == "__main__":
     app.run(debug=True, host="127.0.0.1", port=8050)
+

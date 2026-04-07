@@ -1,5 +1,28 @@
 @import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&family=JetBrains+Mono:wght@400;500;600&display=swap');
 
+:root {
+    --bg-0: #0f0a0a;
+    --bg-1: #1a1111;
+    --bg-2: #241515;
+
+    --panel: rgba(26, 17, 17, 0.72);
+    --panel-border: rgba(120, 113, 108, 0.16);
+
+    --text-main: #faf5f5;
+    --text-muted: #a8a29e;
+    --text-dim: #78716c;
+
+    --danger: #ef4444;
+    --danger-deep: #b91c1c;
+    --orange: #f97316;
+    --yellow: #eab308;
+    --green: #22c55e;
+
+    --shadow-danger: rgba(239, 68, 68, 0.18);
+    --shadow-green: rgba(34, 197, 94, 0.18);
+    --shadow-yellow: rgba(234, 179, 8, 0.18);
+}
+
 * {
     margin: 0;
     padding: 0;
@@ -8,19 +31,22 @@
 
 body {
     font-family: 'Inter', sans-serif;
-    background: linear-gradient(135deg, #020617 0%, #0f172a 50%, #1e293b 100%);
-    color: #e2e8f0;
+    background: linear-gradient(135deg, var(--bg-0) 0%, var(--bg-1) 50%, var(--bg-0) 100%);
+    color: var(--text-main);
     overflow-x: hidden;
     min-height: 100vh;
 }
 
-/* Header styling */
+#react-entry-point {
+    background: transparent;
+}
+
 .dashboard-header {
     position: relative;
     z-index: 10;
     padding: 2rem;
-    background: linear-gradient(180deg, rgba(15, 23, 42, 0.9) 0%, transparent 100%);
-    border-bottom: 1px solid rgba(0, 212, 255, 0.1);
+    background: linear-gradient(180deg, rgba(26, 17, 17, 0.94) 0%, transparent 100%);
+    border-bottom: 1px solid rgba(239, 68, 68, 0.14);
 }
 
 .header-content {
@@ -46,7 +72,7 @@ body {
 .logo-icon {
     width: 100%;
     height: 100%;
-    background: linear-gradient(135deg, #00d4ff 0%, #0099cc 100%);
+    background: linear-gradient(135deg, var(--danger) 0%, var(--danger-deep) 100%);
     border-radius: 16px;
     display: flex;
     align-items: center;
@@ -55,8 +81,8 @@ body {
     position: relative;
     z-index: 2;
     box-shadow:
-        0 0 30px rgba(0, 212, 255, 0.5),
-        inset 0 1px 0 rgba(255, 255, 255, 0.2);
+        0 0 30px rgba(239, 68, 68, 0.45),
+        inset 0 1px 0 rgba(255, 255, 255, 0.15);
 }
 
 .logo-glow {
@@ -64,44 +90,42 @@ body {
     top: 50%;
     left: 50%;
     transform: translate(-50%, -50%);
-    width: 80px;
-    height: 80px;
-    background: radial-gradient(circle, rgba(0, 212, 255, 0.4) 0%, transparent 70%);
+    width: 84px;
+    height: 84px;
+    background: radial-gradient(circle, rgba(239, 68, 68, 0.35) 0%, transparent 70%);
     z-index: 1;
 }
 
 .brand-text h1 {
     font-size: 2.5rem;
     font-weight: 800;
-    background: linear-gradient(135deg, #ffffff 0%, #00d4ff 50%, #0099cc 100%);
+    background: linear-gradient(135deg, #ffffff 0%, var(--danger) 50%, var(--danger-deep) 100%);
     -webkit-background-clip: text;
     -webkit-text-fill-color: transparent;
     background-clip: text;
     letter-spacing: -0.02em;
-    text-shadow: 0 0 30px rgba(0, 212, 255, 0.3);
 }
 
 .brand-text p {
-    color: #64748b;
+    color: var(--text-muted);
     font-size: 1rem;
     margin-top: 0.25rem;
     font-family: 'JetBrains Mono', monospace;
 }
 
-/* Live indicator */
 .live-indicator {
     display: flex;
     align-items: center;
     gap: 0.75rem;
     padding: 0.75rem 1.5rem;
-    background: rgba(0, 212, 255, 0.1);
-    border: 1px solid rgba(0, 212, 255, 0.3);
+    background: rgba(239, 68, 68, 0.10);
+    border: 1px solid rgba(239, 68, 68, 0.28);
     border-radius: 50px;
     backdrop-filter: blur(10px);
 }
 
 .live-text {
-    color: #00ff88;
+    color: #fbbf24;
     font-weight: 600;
     font-size: 0.875rem;
     text-transform: uppercase;
@@ -109,7 +133,6 @@ body {
     font-family: 'JetBrains Mono', monospace;
 }
 
-/* Main container */
 .dashboard-container {
     position: relative;
     z-index: 10;
@@ -118,7 +141,6 @@ body {
     padding: 0 2rem 2rem;
 }
 
-/* Metrics cards */
 .metrics-grid {
     display: grid;
     grid-template-columns: repeat(4, 1fr);
@@ -128,43 +150,42 @@ body {
 
 .metric-card {
     position: relative;
-    background: rgba(15, 23, 42, 0.6);
-    border: 1px solid rgba(148, 163, 184, 0.1);
+    background: var(--panel);
+    border: 1px solid var(--panel-border);
     border-radius: 20px;
     padding: 1.5rem;
     overflow: hidden;
     backdrop-filter: blur(20px);
-    transition: all 0.3s ease;
+    transition: all 0.25s ease;
 }
 
 .metric-card::before {
     content: '';
     position: absolute;
-    top: 0;
-    left: 0;
-    right: 0;
+    inset: 0 auto auto 0;
+    width: 100%;
     height: 3px;
     background: linear-gradient(90deg, transparent, var(--accent), transparent);
     opacity: 0;
-    transition: opacity 0.3s ease;
+    transition: opacity 0.25s ease;
 }
 
 .metric-card:hover {
-    transform: translateY(-5px);
-    border-color: rgba(0, 212, 255, 0.3);
+    transform: translateY(-4px);
+    border-color: rgba(239, 68, 68, 0.26);
     box-shadow:
-        0 20px 40px rgba(0, 0, 0, 0.4),
-        0 0 40px rgba(0, 212, 255, 0.1);
+        0 20px 40px rgba(0, 0, 0, 0.36),
+        0 0 32px rgba(239, 68, 68, 0.12);
 }
 
 .metric-card:hover::before {
     opacity: 1;
 }
 
-.metric-card.demand { --accent: #00d4ff; }
-.metric-card.nodes { --accent: #ffd700; }
-.metric-card.battery { --accent: #00ff88; }
-.metric-card.solar { --accent: #ffaa00; }
+.metric-card.demand { --accent: var(--danger); }
+.metric-card.nodes { --accent: var(--orange); }
+.metric-card.battery { --accent: var(--green); }
+.metric-card.solar { --accent: var(--yellow); }
 
 .metric-icon-wrapper {
     width: 48px;
@@ -175,52 +196,48 @@ body {
     justify-content: center;
     font-size: 1.5rem;
     margin-bottom: 1rem;
-    position: relative;
-    overflow: hidden;
 }
 
 .metric-card.demand .metric-icon-wrapper {
-    background: linear-gradient(135deg, rgba(0, 212, 255, 0.2), rgba(0, 212, 255, 0.05));
-    box-shadow: 0 0 20px rgba(0, 212, 255, 0.3);
+    background: linear-gradient(135deg, rgba(239, 68, 68, 0.20), rgba(239, 68, 68, 0.05));
+    box-shadow: 0 0 20px rgba(239, 68, 68, 0.20);
 }
 
 .metric-card.nodes .metric-icon-wrapper {
-    background: linear-gradient(135deg, rgba(255, 215, 0, 0.2), rgba(255, 215, 0, 0.05));
-    box-shadow: 0 0 20px rgba(255, 215, 0, 0.3);
+    background: linear-gradient(135deg, rgba(249, 115, 22, 0.20), rgba(249, 115, 22, 0.05));
+    box-shadow: 0 0 20px rgba(249, 115, 22, 0.20);
 }
 
 .metric-card.battery .metric-icon-wrapper {
-    background: linear-gradient(135deg, rgba(0, 255, 136, 0.2), rgba(0, 255, 136, 0.05));
-    box-shadow: 0 0 20px rgba(0, 255, 136, 0.3);
+    background: linear-gradient(135deg, rgba(34, 197, 94, 0.20), rgba(34, 197, 94, 0.05));
+    box-shadow: 0 0 20px rgba(34, 197, 94, 0.20);
 }
 
 .metric-card.solar .metric-icon-wrapper {
-    background: linear-gradient(135deg, rgba(255, 170, 0, 0.2), rgba(255, 170, 0, 0.05));
-    box-shadow: 0 0 20px rgba(255, 170, 0, 0.3);
+    background: linear-gradient(135deg, rgba(234, 179, 8, 0.20), rgba(234, 179, 8, 0.05));
+    box-shadow: 0 0 20px rgba(234, 179, 8, 0.20);
 }
 
 .metric-value {
     font-size: 2.5rem;
     font-weight: 800;
-    color: #ffffff;
+    color: #fff7f7;
     line-height: 1;
     margin-bottom: 0.5rem;
     font-family: 'JetBrains Mono', monospace;
-    text-shadow: 0 0 20px rgba(255, 255, 255, 0.1);
 }
 
 .metric-label {
     font-size: 0.875rem;
-    color: #64748b;
+    color: var(--text-muted);
     text-transform: uppercase;
     letter-spacing: 0.05em;
     font-weight: 500;
 }
 
-/* Chart section */
 .chart-container {
-    background: rgba(15, 23, 42, 0.6);
-    border: 1px solid rgba(148, 163, 184, 0.1);
+    background: var(--panel);
+    border: 1px solid var(--panel-border);
     border-radius: 20px;
     padding: 1.5rem;
     margin-bottom: 2rem;
@@ -232,11 +249,10 @@ body {
 .chart-container::before {
     content: '';
     position: absolute;
-    top: 0;
-    left: 0;
-    right: 0;
+    inset: 0 auto auto 0;
+    width: 100%;
     height: 1px;
-    background: linear-gradient(90deg, transparent, rgba(0, 212, 255, 0.5), transparent);
+    background: linear-gradient(90deg, transparent, rgba(239, 68, 68, 0.45), transparent);
 }
 
 .chart-header {
@@ -249,7 +265,7 @@ body {
 .chart-title {
     font-size: 1.25rem;
     font-weight: 700;
-    color: #e2e8f0;
+    color: var(--text-main);
     display: flex;
     align-items: center;
     gap: 0.75rem;
@@ -259,12 +275,11 @@ body {
     content: '';
     width: 4px;
     height: 24px;
-    background: linear-gradient(180deg, #00d4ff, #0099cc);
+    background: linear-gradient(180deg, var(--danger), var(--danger-deep));
     border-radius: 2px;
-    box-shadow: 0 0 10px rgba(0, 212, 255, 0.5);
+    box-shadow: 0 0 10px rgba(239, 68, 68, 0.35);
 }
 
-/* Nodes grid */
 .nodes-section {
     margin-top: 2rem;
 }
@@ -279,7 +294,7 @@ body {
 .section-title {
     font-size: 1.5rem;
     font-weight: 700;
-    color: #e2e8f0;
+    color: var(--text-main);
     display: flex;
     align-items: center;
     gap: 0.75rem;
@@ -289,9 +304,9 @@ body {
     content: '';
     width: 4px;
     height: 28px;
-    background: linear-gradient(180deg, #00ff88, #00cc6a);
+    background: linear-gradient(180deg, var(--green), #16a34a);
     border-radius: 2px;
-    box-shadow: 0 0 10px rgba(0, 255, 136, 0.5);
+    box-shadow: 0 0 10px rgba(34, 197, 94, 0.35);
 }
 
 .nodes-grid {
@@ -301,24 +316,23 @@ body {
 }
 
 .node-card {
-    background: rgba(15, 23, 42, 0.6);
-    border: 1px solid rgba(148, 163, 184, 0.1);
+    background: var(--panel);
+    border: 1px solid var(--panel-border);
     border-radius: 20px;
     padding: 1.5rem;
     position: relative;
     overflow: hidden;
     backdrop-filter: blur(20px);
-    transition: all 0.3s ease;
+    transition: all 0.25s ease;
 }
 
 .node-card::before {
     content: '';
     position: absolute;
-    top: 0;
-    left: -100%;
+    inset: 0 auto 0 -100%;
     width: 100%;
     height: 100%;
-    background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.03), transparent);
+    background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.025), transparent);
     transition: left 0.6s ease;
 }
 
@@ -327,11 +341,11 @@ body {
 }
 
 .node-card:hover {
-    transform: translateY(-5px);
-    border-color: rgba(0, 212, 255, 0.3);
+    transform: translateY(-4px);
+    border-color: rgba(239, 68, 68, 0.26);
     box-shadow:
-        0 25px 50px rgba(0, 0, 0, 0.5),
-        0 0 60px rgba(0, 212, 255, 0.1);
+        0 20px 40px rgba(0, 0, 0, 0.36),
+        0 0 32px rgba(239, 68, 68, 0.12);
 }
 
 .node-header {
@@ -345,7 +359,7 @@ body {
     font-family: 'JetBrains Mono', monospace;
     font-size: 0.875rem;
     font-weight: 600;
-    color: #64748b;
+    color: var(--text-dim);
     text-transform: uppercase;
     letter-spacing: 0.05em;
 }
@@ -355,11 +369,11 @@ body {
     align-items: center;
     gap: 0.5rem;
     padding: 0.375rem 0.75rem;
-    background: rgba(0, 255, 136, 0.1);
-    border: 1px solid rgba(0, 255, 136, 0.3);
+    background: rgba(34, 197, 94, 0.10);
+    border: 1px solid rgba(34, 197, 94, 0.28);
     border-radius: 20px;
     font-size: 0.75rem;
-    color: #00ff88;
+    color: var(--green);
     font-weight: 600;
     text-transform: uppercase;
 }
@@ -367,18 +381,18 @@ body {
 .status-dot {
     width: 6px;
     height: 6px;
-    background: #00ff88;
+    background: var(--green);
     border-radius: 50%;
-    box-shadow: 0 0 8px #00ff88;
+    box-shadow: 0 0 8px var(--green);
 }
 
 .node-power {
     font-size: 2.5rem;
     font-weight: 800;
-    color: #00d4ff;
+    color: var(--danger);
     margin-bottom: 1rem;
     font-family: 'JetBrains Mono', monospace;
-    text-shadow: 0 0 20px rgba(0, 212, 255, 0.3);
+    text-shadow: 0 0 18px rgba(239, 68, 68, 0.22);
 }
 
 .node-stats {
@@ -396,7 +410,7 @@ body {
 
 .stat-label {
     font-size: 0.75rem;
-    color: #475569;
+    color: #57534e;
     text-transform: uppercase;
     letter-spacing: 0.05em;
 }
@@ -404,16 +418,15 @@ body {
 .stat-value {
     font-size: 1.125rem;
     font-weight: 600;
-    color: #94a3b8;
+    color: var(--text-muted);
     font-family: 'JetBrains Mono', monospace;
 }
 
 .stat-value.solar {
-    color: #ffd700;
-    text-shadow: 0 0 10px rgba(255, 215, 0, 0.3);
+    color: var(--yellow);
+    text-shadow: 0 0 10px rgba(234, 179, 8, 0.22);
 }
 
-/* Battery indicator */
 .battery-wrapper {
     margin-top: 0.5rem;
 }
@@ -427,7 +440,7 @@ body {
 
 .battery-label {
     font-size: 0.875rem;
-    color: #64748b;
+    color: var(--text-dim);
     font-weight: 500;
 }
 
@@ -454,32 +467,21 @@ body {
     overflow: hidden;
 }
 
-.battery-fill::after {
-    content: '';
-    position: absolute;
-    top: 0;
-    left: 0;
-    right: 0;
-    bottom: 0;
-    background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.3), transparent);
-}
-
 .battery-fill.high {
-    background: linear-gradient(90deg, #00ff88, #00cc6a);
-    box-shadow: 0 0 20px rgba(0, 255, 136, 0.4);
+    background: linear-gradient(90deg, var(--green), #16a34a);
+    box-shadow: 0 0 18px rgba(34, 197, 94, 0.35);
 }
 
 .battery-fill.medium {
-    background: linear-gradient(90deg, #ffaa00, #ff8800);
-    box-shadow: 0 0 20px rgba(255, 170, 0, 0.4);
+    background: linear-gradient(90deg, var(--orange), #ea580c);
+    box-shadow: 0 0 18px rgba(249, 115, 22, 0.35);
 }
 
 .battery-fill.low {
-    background: linear-gradient(90deg, #ff3366, #cc0044);
-    box-shadow: 0 0 20px rgba(255, 51, 102, 0.4);
+    background: linear-gradient(90deg, var(--danger), #dc2626);
+    box-shadow: 0 0 18px rgba(239, 68, 68, 0.35);
 }
 
-/* Responsive */
 @media (max-width: 1200px) {
     .metrics-grid {
         grid-template-columns: repeat(2, 1fr);
